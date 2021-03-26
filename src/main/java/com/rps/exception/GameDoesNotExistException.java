@@ -14,6 +14,6 @@ public class GameDoesNotExistException extends Exception {
 	private static final long serialVersionUID = -276180896714262835L;
 
 	public GameDoesNotExistException(final String id) {
-		super(String.format("The game with id %d does not exist!", id));
+		super(String.format("The game with id %s does not exist!", id));
 	}
 }

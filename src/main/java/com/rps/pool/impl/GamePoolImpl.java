@@ -32,6 +32,10 @@ public class GamePoolImpl implements GamePool<String, Game> {
 	 */
 	@Override
 	public Game add(final Game game) {
+		if (game == null) {
+			throw new IllegalArgumentException("Game needs to be present");
+		}
+
 		return games.put(game.getId(), game);
 	}
 
