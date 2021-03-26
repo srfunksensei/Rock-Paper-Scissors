@@ -9,20 +9,20 @@ import com.rps.exception.GameDoesNotExistException;
 import com.rps.pool.GamePool;
 
 @Service
-public class GamePoolImpl implements GamePool {
+public class GamePoolImpl implements GamePool<String, Game> {
 
-	private ConcurrentHashMap<Long, Game> games = new ConcurrentHashMap<>();
-	 
+	private final ConcurrentHashMap<String, Game> games = new ConcurrentHashMap<>();
+
 	/*
 	 * (non-Javadoc)
 	 * @see com.rps.pool.GamePool#get(java.lang.String)
 	 */
 	@Override
-	public Game get(long id) throws GameDoesNotExistException{
+	public Game get(final String id) throws GameDoesNotExistException {
 		if(!games.containsKey(id)) {
 			throw new GameDoesNotExistException(id);
 		}
-		
+
 		return games.get(id);
 	}
 
@@ -31,8 +31,8 @@ public class GamePoolImpl implements GamePool {
 	 * @see com.rps.pool.GamePool#add(com.rps.dto.Game)
 	 */
 	@Override
-	public void add(Game game) {
-		games.put(game.getId(), game);
+	public Game add(final Game game) {
+		return games.put(game.getId(), game);
 	}
 
 	/*
@@ -40,8 +40,7 @@ public class GamePoolImpl implements GamePool {
 	 * @see com.rps.pool.GamePool#remove(java.lang.String)
 	 */
 	@Override
-	public void remove(long id) {
+	public void remove(final String id) {
 		games.remove(id);
 	}
-
 }

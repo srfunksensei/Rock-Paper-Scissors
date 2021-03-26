@@ -44,10 +44,10 @@ import com.rps.pool.GamePool;
 @RequestMapping(value = "/games")
 public class GameController {
 	
-	private final GamePool gamePool;
+	private final GamePool<String, Game> gamePool;
 	
 	@Autowired
-	public GameController(GamePool gamePool) {
+	public GameController(GamePool<String, Game> gamePool) {
 		this.gamePool = gamePool;
 	}
 	
@@ -67,7 +67,7 @@ public class GameController {
 	 * Controller method that creates game based on the choice. 
 	 * Listens to: POST /games
 	 * 
-	 * @param type of the game user selected {@link GameType}
+	 * @param gameType of the game user selected {@link GameType}
 	 * @return {@link HttpHeaders} with path to the created game in the location tag
 	 */
 	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -93,7 +93,7 @@ public class GameController {
 	 */
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	Game getGame(@PathVariable long id) throws GameDoesNotExistException {
+	Game getGame(@PathVariable final String id) throws GameDoesNotExistException {
 		return gamePool.get(id);
 	}
 
@@ -105,7 +105,7 @@ public class GameController {
 	 */
 	@DeleteMapping(value = "/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	void abortGame(@PathVariable long id) {
+	void abortGame(@PathVariable final String id) {
 		gamePool.remove(id);
 	}
 
@@ -120,7 +120,7 @@ public class GameController {
 	 */
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	Result play(@PathVariable long id, @RequestBody Move playerOne) throws GameDoesNotExistException {
+	Result play(@PathVariable final String id, @RequestBody Move playerOne) throws GameDoesNotExistException {
 		Game game = gamePool.get(id);
 		game.setPlayerOne(playerOne);
 

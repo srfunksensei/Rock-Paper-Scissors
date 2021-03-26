@@ -1,6 +1,6 @@
 package com.rps.dto;
 
-import java.util.Random;
+import java.util.UUID;
 
 /**
  * Object class which represent the game which is played
@@ -9,14 +9,14 @@ import java.util.Random;
  *
  */
 public class Game {
-	private long id;
+	private final String id;
 	private Move playerOne, playerTwo;
 	
 	public Game() {
-		this.id = new Random().nextLong();
+		this.id = UUID.randomUUID().toString();
 	}
 	
-	public long getId() {
+	public String getId() {
 		return id;
 	}
 
@@ -24,7 +24,7 @@ public class Game {
 		return playerOne;
 	}
 
-	public void setPlayerOne(Move playerOne) {
+	public void setPlayerOne(final Move playerOne) {
 		this.playerOne = playerOne;
 	}
 
@@ -32,7 +32,7 @@ public class Game {
 		return playerTwo;
 	}
 
-	public void setPlayerTwo(Move playerTwo) {
+	public void setPlayerTwo(final Move playerTwo) {
 		this.playerTwo = playerTwo;
 	}
 }

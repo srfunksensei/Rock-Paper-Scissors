@@ -1,6 +1,5 @@
 package com.rps.pool;
 
-import com.rps.dto.Game;
 import com.rps.exception.GameDoesNotExistException;
 
 /**
@@ -10,24 +9,26 @@ import com.rps.exception.GameDoesNotExistException;
  * @author mb
  *
  */
-public interface GamePool {
-	
+public interface GamePool<ID, T> {
+
 	/**
-	 * Returns game with specified id (if exist), otherwise throws an exception
-	 * @param id
-	 * @return
+	 Returns game with specified id (if exist), otherwise throws an exception
+	 * @param id of the game to be fetched
+	 * @return game object
+	 * @throws GameDoesNotExistException in case that game with specified id does not exist
 	 */
-	Game get(long id) throws GameDoesNotExistException;
+	T get(final ID id) throws GameDoesNotExistException;
 	
 	/**
 	 * Adds game to the pool 
-	 * @param game
+	 * @param game to be added
+	 * @return game
 	 */
-	void add(Game game);
+	T add(final T game);
 	
 	/**
 	 * Removes game from the pool
-	 * @param id
+	 * @param id of the game to be removed
 	 */
-	void remove(long id);
+	void remove(final ID id);
 }
