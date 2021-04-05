@@ -23,6 +23,6 @@ public class RandomEnumTest {
 	@Test
 	public void testRegularEnum() {
 		DayOfWeek value = RandomEnum.getValue(DayOfWeek.class);
-		Assert.assertNotEquals("Should not return null for a regular Enum!", value);
+		Assert.assertNotNull("Should not return null for a regular Enum!", value);
 	}
 }

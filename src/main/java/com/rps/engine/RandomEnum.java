@@ -17,17 +17,17 @@ public class RandomEnum {
 	/**
 	 * Computes a random value of type clazz
 	 * 
-	 * @param clazz 
+	 * @param clazz class type of enum
 	 * @return a random enum of type clazz
 	 */
-	public static <T extends Enum<?>> T getValue(Class<T> clazz) {
+	public static <T extends Enum<?>> T getValue(final Class<T> clazz) {
 		if (clazz == null) {
 			throw new IllegalArgumentException("This method expects an enum class as parameter, null is not allowed!");
 		}
 
 		T result = null;
 
-		List<T> values = Arrays.asList(clazz.getEnumConstants());
+		final List<T> values = Arrays.asList(clazz.getEnumConstants());
 
 		if (!values.isEmpty()) {
 			Collections.shuffle(values);
@@ -35,5 +35,5 @@ public class RandomEnum {
 		}
 
 		return result;
-}
+	}
 }
