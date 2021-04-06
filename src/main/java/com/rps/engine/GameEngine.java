@@ -17,56 +17,44 @@ import com.rps.dto.Result;
  */
 public class GameEngine {
 	
-	private static List<Rule> RULES = Arrays.asList( 
+	public static final List<Rule> RULES = Arrays.asList(
         new Rule(Move.Rock, Move.Scissors),
         new Rule(Move.Paper, Move.Rock),
         new Rule(Move.Scissors, Move.Paper)
 	);
 	
 	/**
-	 * Evaluates who won the game
+	 * Evaluates if player one won the game
 	 * 
-	 * @param game
-	 * @return
+	 * @param game Game for which result needs to be evaluated
+	 * @return if player one won the game
 	 */
-	public static Result evaluateResult(Game game) {
-		if(game == null) {
-			String msg = "The game must not be null to evaluate result!";
-			throw new IllegalArgumentException(msg);
+	public static Result evaluateResult(final Game game) {
+		if (game == null) {
+			throw new IllegalArgumentException("The game must not be null to evaluate result!");
 		}
 		
-		Move playerOne = game.getPlayerOne(),
+		final Move playerOne = game.getPlayerOne(),
 				playerTwo = game.getPlayerTwo();
-		if(playerOne == null || playerTwo == null) {
-			String msg = String.format("The moves must not be null to evalutate result (playerOne: %s, playerTwo: %s)!", playerOne, playerTwo);
+		if (playerOne == null || playerTwo == null) {
+			final String msg = String.format("The moves must not be null to evaluate result (playerOne: %s, playerTwo: %s)!", playerOne, playerTwo);
 			throw new IllegalArgumentException(msg);
 		}
 		
-		Result result = Result.Draw;
-		
-		Optional<Rule> rule = findWinningRule(playerOne, playerTwo);
-		if(rule.isPresent()) {
-			result = Result.Win;
-		}
-		
-		rule = findWinningRule(playerTwo, playerOne);
-		if(rule.isPresent()) {
-			result = Result.Loose;
-		}
-		
-		return result;
+		return isPlayerOneWinner(playerOne, playerTwo) ? Result.Win :
+				isPlayerOneWinner(playerTwo, playerOne) ? Result.Loose : Result.Draw;
 	}
 	
 	/**
-	 * Finds if there is a winning rule for passed moves
+	 * Finds if player one has won the game
 	 * 
 	 * @param playerOne move
 	 * @param playerTwo move
-	 * @return
+	 * @return if player one has won the game
 	 */
-	private static Optional<Rule> findWinningRule(Move playerOne, Move playerTwo)
-    {
-        return RULES.stream().filter(r -> r.winner == playerOne && r.loser == playerTwo).findFirst();
-    }
+	private static boolean isPlayerOneWinner(final Move playerOne, final Move playerTwo) {
+		final Optional<Rule> ruleOpt = RULES.stream().filter(r -> r.getWinner() == playerOne && r.getLoser() == playerTwo).findFirst();
+		return ruleOpt.isPresent();
+	}
 
 }
