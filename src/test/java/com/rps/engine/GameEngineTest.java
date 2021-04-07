@@ -1,6 +1,7 @@
 package com.rps.engine;
 
 import com.rps.dto.Game;
+import com.rps.dto.GameType;
 import com.rps.dto.Move;
 import com.rps.dto.Result;
 import org.junit.Assert;
@@ -15,7 +16,7 @@ public class GameEngineTest {
 	
 	@Test(expected = IllegalArgumentException.class)
 	public void testNoMoves() {
-		final Game game = new Game();
+		final Game game = new Game(GameType.PersonVsComputer);
 		game.setPlayerOne(Move.Paper);
 		
 		GameEngine.evaluateResult(null);
@@ -24,7 +25,7 @@ public class GameEngineTest {
 	@Test
 	public void testEvaluate_draw() {
 		for(final Move move : Move.values()) {
-			final Game game = new Game();
+			final Game game = new Game(GameType.PersonVsComputer);
 			game.setPlayerOne(move);
 			game.setPlayerTwo(move);
 
@@ -37,7 +38,7 @@ public class GameEngineTest {
 	@Test
 	public void testEvaluate_win() {
 		for (final Rule rule : GameEngine.RULES) {
-			final Game game = new Game();
+			final Game game = new Game(GameType.PersonVsComputer);
 			game.setPlayerOne(rule.getWinner());
 			game.setPlayerTwo(rule.getLoser());
 
@@ -50,7 +51,7 @@ public class GameEngineTest {
 	@Test
 	public void testEvaluate_loose() {
 		for (final Rule rule : GameEngine.RULES) {
-			final Game game = new Game();
+			final Game game = new Game(GameType.PersonVsComputer);
 			game.setPlayerOne(rule.getLoser());
 			game.setPlayerTwo(rule.getWinner());
 

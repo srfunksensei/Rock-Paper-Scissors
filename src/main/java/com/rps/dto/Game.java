@@ -10,14 +10,20 @@ import java.util.UUID;
  */
 public class Game {
 	private final String id;
+	private final GameType gameType;
 	private Move playerOne, playerTwo;
 	
-	public Game() {
+	public Game(final GameType gameType) {
 		this.id = UUID.randomUUID().toString();
+		this.gameType = gameType;
 	}
 	
 	public String getId() {
 		return id;
+	}
+
+	public GameType getGameType() {
+		return gameType;
 	}
 
 	public Move getPlayerOne() {

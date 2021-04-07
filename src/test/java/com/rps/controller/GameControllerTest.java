@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.rps.dto.GameType;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ public class GameControllerTest {
 	@MockBean
 	private GamePool gamePool;
 	
-	private final Game game = new Game();
+	private final Game game = new Game(GameType.PersonVsComputer);
 	
 	@Before
 	public void setup() throws GameDoesNotExistException {

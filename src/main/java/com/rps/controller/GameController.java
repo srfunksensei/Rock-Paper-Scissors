@@ -72,8 +72,8 @@ public class GameController {
 	 */
 	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	HttpHeaders startNewGame(@RequestBody GameType gameType) {
-		Game game = new Game();
+	HttpHeaders startNewGame(@RequestBody final GameType gameType) {
+		Game game = new Game(gameType);
 
 		gamePool.add(game);
 
@@ -122,7 +122,13 @@ public class GameController {
 	@ResponseStatus(HttpStatus.OK)
 	Result play(@PathVariable final String id, @RequestBody Move playerOne) throws GameDoesNotExistException {
 		Game game = gamePool.get(id);
-		game.setPlayerOne(playerOne);
+		if (!GameType.ComputerVsComputer.equals(game.getGameType())) {
+			if (playerOne != null) {
+				game.setPlayerOne(playerOne);
+			} else {
+				game.setPlayerOne(RandomEnum.getValue(Move.class));
+			}
+		}
 
 		Move playerTwo = RandomEnum.getValue(Move.class);
 		game.setPlayerTwo(playerTwo);

@@ -1,6 +1,7 @@
 package com.rps.pool;
 
 import com.rps.dto.Game;
+import com.rps.dto.GameType;
 import com.rps.exception.GameDoesNotExistException;
 import com.rps.pool.impl.GamePoolImpl;
 import org.junit.Assert;
@@ -17,7 +18,7 @@ public class GamePoolTest {
 
 	@Test
 	public void get() throws GameDoesNotExistException {
-		final Game game = new Game();
+		final Game game = new Game(GameType.PersonVsComputer);
 		gamePool.add(game);
 
 		final Game result = gamePool.get(game.getId());
@@ -26,7 +27,7 @@ public class GamePoolTest {
 
 	@Test
 	public void add() throws GameDoesNotExistException {
-		final Game game = new Game();
+		final Game game = new Game(GameType.PersonVsComputer);
 
 		final Game result = gamePool.add(game);
 		Assert.assertNull("Expected null", result);
@@ -37,7 +38,7 @@ public class GamePoolTest {
 
 	@Test
 	public void add_sameGameTwice() throws GameDoesNotExistException {
-		final Game game = new Game();
+		final Game game = new Game(GameType.PersonVsComputer);
 
 		final Game result = gamePool.add(game);
 		Assert.assertNull("Expected null", result);
