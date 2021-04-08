@@ -57,27 +57,27 @@ public class GameController {
 	 * 
 	 * @return list of all game types available
 	 */
-	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "gameTypes", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	List<GameType> gameTypes() {
+	public List<GameType> gameTypes() {
 		return Arrays.asList(GameType.values());
 	}
 
 	/**
 	 * Controller method that creates game based on the choice. 
-	 * Listens to: POST /games
+	 * Listens to: POST /games/start
 	 * 
 	 * @param gameType of the game user selected {@link GameType}
 	 * @return {@link HttpHeaders} with path to the created game in the location tag
 	 */
-	@PostMapping(value = "", consumes = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/start", consumes = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.CREATED)
-	HttpHeaders startNewGame(@RequestBody final GameType gameType) {
-		Game game = new Game(gameType);
+	public HttpHeaders startNewGame(@RequestBody final GameType gameType) {
+		final Game game = new Game(gameType);
 
 		gamePool.add(game);
 
-		HttpHeaders headers = new HttpHeaders();
+		final HttpHeaders headers = new HttpHeaders();
 		//headers.setLocation(linkTo(GameController.class).slash(game.getId()).toUri());
 		headers.setLocation(URI.create("http://localhost:8080/games/" + game.getId()));
 		return headers;
@@ -93,7 +93,7 @@ public class GameController {
 	 */
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	Game getGame(@PathVariable final String id) throws GameDoesNotExistException {
+	public Game getGame(@PathVariable final String id) throws GameDoesNotExistException {
 		return gamePool.get(id);
 	}
 
@@ -104,8 +104,8 @@ public class GameController {
 	 * @param id of the requested {@link Game}
 	 */
 	@DeleteMapping(value = "/{id}")
-	@ResponseStatus(HttpStatus.OK)
-	void abortGame(@PathVariable final String id) {
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void abortGame(@PathVariable final String id) {
 		gamePool.remove(id);
 	}
 
@@ -120,7 +120,7 @@ public class GameController {
 	 */
 	@PutMapping(value = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	Result play(@PathVariable final String id, @RequestBody Move playerOne) throws GameDoesNotExistException {
+	public Result play(@PathVariable final String id, @RequestBody final Move playerOne) throws GameDoesNotExistException {
 		Game game = gamePool.get(id);
 		if (!GameType.ComputerVsComputer.equals(game.getGameType())) {
 			if (playerOne != null) {
@@ -130,7 +130,7 @@ public class GameController {
 			}
 		}
 
-		Move playerTwo = RandomEnum.getValue(Move.class);
+		final Move playerTwo = RandomEnum.getValue(Move.class);
 		game.setPlayerTwo(playerTwo);
 		
 		return GameEngine.evaluateResult(game);

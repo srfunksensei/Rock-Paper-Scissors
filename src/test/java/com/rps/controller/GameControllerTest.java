@@ -8,6 +8,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.rps.dto.GameType;
+import com.rps.dto.Move;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -30,56 +31,92 @@ public class GameControllerTest {
 
 	@Autowired
 	private MockMvc mockMvc;
-	
+
 	@MockBean
-	private GamePool gamePool;
-	
+	private GamePool<String, Game> gamePool;
+
+	private final ObjectMapper jsonMapper = new ObjectMapper();
+
 	private final Game game = new Game(GameType.PersonVsComputer);
-	
+
 	@Before
 	public void setup() throws GameDoesNotExistException {
-		BDDMockito.given(this.gamePool.get(game.getId())).willReturn(game);
+		BDDMockito.given(gamePool.get(game.getId())).willReturn(game);
 	}
-	
-	@Test
-    public void testGameTypes() throws Exception {
-        this.mockMvc.perform(get("/games").accept(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8));
 
-    }
-	
 	@Test
-	public void testAbortGame() throws Exception {
-		this.mockMvc.perform(delete("/games/1").accept(MediaType.APPLICATION_JSON))
-        	.andExpect(status().isOk());
+    public void gameTypes() throws Exception {
+		final String jsonContent = jsonMapper.writeValueAsString(GameType.values());
+		mockMvc.perform(get("/games/gameTypes")
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(content().json(jsonContent));
 	}
-	
+
 	@Test
-	public void testStartNewGame() throws Exception {
-		this.mockMvc.perform(post("/games")
-			.content("0").contentType(MediaType.APPLICATION_JSON)
-			.accept(MediaType.APPLICATION_JSON_VALUE))
-    		.andExpect(status().isCreated());
+	public void abortGame_nonExistingGame() throws Exception {
+		mockMvc.perform(delete("/games/1")
+				.accept(MediaType.APPLICATION_JSON))
+        		.andExpect(status().isNoContent());
 	}
-	
+
 	@Test
-	public void testGetGame() throws Exception {
-		String jsonContent = new ObjectMapper().writeValueAsString(game);
-		
-		this.mockMvc.perform(get("/games/" + game.getId()).accept(MediaType.APPLICATION_JSON))
-	        .andExpect(status().isOk())
-	        .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
-	        .andExpect(content().json(jsonContent));
+	public void abortGame() throws Exception {
+		mockMvc.perform(delete("/games/" + game.getId())
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isNoContent());
 	}
-	
+
 	@Test
-	public void testPlay() throws Exception {
-		this.mockMvc.perform(put("/games/" + game.getId())
-				.content("0").contentType(MediaType.APPLICATION_JSON)
+	public void startNewGame() throws Exception {
+		final String jsonContent = jsonMapper.writeValueAsString(game.getGameType().name());
+
+		mockMvc.perform(post("/games/start")
+				.content(jsonContent)
+				.contentType(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isCreated())
+				.andReturn();
+	}
+
+	@Test
+	public void startNewGame_notExistingGameType() throws Exception {
+		mockMvc.perform(post("/games/start")
+				.content("notExistingGameType")
+				.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isBadRequest())
+				.andReturn();
+	}
+
+	@Test
+	public void getGame() throws Exception {
+		final String jsonContent = jsonMapper.writeValueAsString(game);
+
+		mockMvc.perform(get("/games/" + game.getId())
+				.accept(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(content().json(jsonContent));
+	}
+
+	@Test
+	public void play() throws Exception {
+		final String jsonContent = jsonMapper.writeValueAsString(Move.Paper.name());
+
+		mockMvc.perform(put("/games/" + game.getId())
+				.content(jsonContent)
+				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
 	    		.andExpect(status().isOk())
 	    		.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
 	}
-	
+
+	@Test
+	public void play_notExistingMove() throws Exception {
+		mockMvc.perform(put("/games/" + game.getId())
+				.content("notExistingMove")
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isBadRequest());
+	}
 }
