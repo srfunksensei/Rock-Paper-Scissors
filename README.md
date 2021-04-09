@@ -16,17 +16,17 @@ To call the API you will need to install **curl** to use following methods:
 
 * To retrieve all game types
 ```
-curl -i -X GET http://localhost:8080/games
+curl -i -X GET http://localhost:8080/games/gameTypes
 ```
 
 * To start a new game
 ``` 
-curl -i -H "Content-Type: application/json" -X POST -d "{{gameType}}" http://localhost:8080/games
+curl -i -H "Content-Type: application/json" -X POST -d '"{{gameType}}"' http://localhost:8080/games/start
 ```
 
 * To make a move
 ```
-curl -i -H "Content-Type: application/json" -X PUT -d "{{move}}" http://localhost:8080/games/{{gameId}}
+curl -i -H "Content-Type: application/json" -X PUT -d '"{{move}}"' http://localhost:8080/games/{{gameId}}
 ```
 
 * To get the game
@@ -46,7 +46,7 @@ where
 
 Examples:
 
->curl -i -X GET http://localhost:8080/games
+>curl -i -X GET http://localhost:8080/games/gameTypes
 ```
 HTTP/1.1 200
 Content-Type: application/json;charset=UTF-8
@@ -56,7 +56,7 @@ Date: Thu, 20 Jul 2017 10:08:34 GMT
 ["PersonVsComputer","ComputerVsComputer"]
 ```
 
->curl -i -H "Content-Type: application/json" -X POST -d "0" http://localhost:8080/games
+>curl -i -H "Content-Type: application/json" -X POST -d '"PersonVsComputer"' http://localhost:8080/games/start
 ```
 HTTP/1.1 201
 Location: http://localhost:8080/games/060aa2e4-3325-4a90-9420-a8d0acf667ca
@@ -64,7 +64,7 @@ Content-Length: 0
 Date: Thu, 20 Jul 2017 10:09:09 GMT
 ```
 
->curl -i -H "Content-Type: application/json" -X PUT -d "0" http://localhost:8080/games/060aa2e4-3325-4a90-9420-a8d0acf667ca
+>curl -i -H "Content-Type: application/json" -X PUT -d '"Rock"' http://localhost:8080/games/060aa2e4-3325-4a90-9420-a8d0acf667ca
 ```
 HTTP/1.1 200
 Content-Type: application/json;charset=UTF-8
@@ -80,11 +80,10 @@ Content-Type: application/json;charset=UTF-8
 Transfer-Encoding: chunked
 Date: Thu, 20 Jul 2017 10:10:14 GMT
 
-{"id":060aa2e4-3325-4a90-9420-a8d0acf667ca,"playerOne":"Rock","playerTwo":"Scissors"}
+{"id":060aa2e4-3325-4a90-9420-a8d0acf667ca,"gameType":"PersonVsComputer","playerOne":"Rock","playerTwo":"Scissors"}
 ```
->curl -i -X DELETE http://localhost:8080/games/060aa2e4-3325-4a90-9420-a8d0acf667ca
+>curl -i -X DELETE http://localhost:8080/games/06be7094-d383-4d57-9999-6f8237453b75
 ```
-HTTP/1.1 200
-Content-Length: 0
+HTTP/1.1 204
 Date: Thu, 20 Jul 2017 10:10:42 GMT
 ```
