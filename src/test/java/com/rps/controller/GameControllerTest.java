@@ -50,7 +50,7 @@ public class GameControllerTest {
 		mockMvc.perform(get("/games/gameTypes")
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(content().json(jsonContent));
 	}
 
@@ -95,7 +95,7 @@ public class GameControllerTest {
 		mockMvc.perform(get("/games/" + game.getId())
 				.accept(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-				.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8))
+				.andExpect(content().contentType(MediaType.APPLICATION_JSON))
 				.andExpect(content().json(jsonContent));
 	}
 
@@ -108,7 +108,7 @@ public class GameControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.accept(MediaType.APPLICATION_JSON_VALUE))
 	    		.andExpect(status().isOk())
-	    		.andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+	    		.andExpect(content().contentType(MediaType.APPLICATION_JSON));
 	}
 
 	@Test

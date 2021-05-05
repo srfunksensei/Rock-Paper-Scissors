@@ -3,48 +3,28 @@ Rock-Paper-Scissors
 -------------
 This is a simple app which enables you to play Rock-Paper-Scissors game all day. The app is designed in a RESTful API way.
 
+## How to run application
 
-### How to use it
+To be able to see the application in action you must follow these steps:
 
-To start app open console window in the directory where .jar is placed and type the following:
+1. run `mvn install`
+2. run `java -jar rps-0.0.1-SNAPSHOT.jar`
+
+### API documentation
+
+URL for Swagger API User Interface
 ```
-java -jar rps-0.0.1-SNAPSHOT.jar
-```
-this will start up the application.
-
-To call the API you will need to install **curl** to use following methods:
-
-* To retrieve all game types
-```
-curl -i -X GET http://localhost:8080/games/gameTypes
+http://localhost:8080/swagger-ui/
 ```
 
-* To start a new game
-``` 
-curl -i -H "Content-Type: application/json" -X POST -d '"{{gameType}}"' http://localhost:8080/games/start
+URL for Swagger API Docs Json
+```
+http://localhost:8080/v2/api-docs
 ```
 
-* To make a move
-```
-curl -i -H "Content-Type: application/json" -X PUT -d '"{{move}}"' http://localhost:8080/games/{{gameId}}
-```
+### Examples of usage
 
-* To get the game
-```
-curl -i -X GET http://localhost:8080/games/{{gameId}}
-```
-
-* To abort the game
-```
-curl -i -X DELETE http://localhost:8080/games/{{gameId}}
-```
-
-where 
-* {{gameType}} is type of the game
-* {{gameId}} is id of the game which you wish to play
-* {{move}} is one of the moves you want to throw
-
-Examples:
+To call the API you will need to install [curl](https://curl.se/download.html) to use following methods:
 
 >curl -i -X GET http://localhost:8080/games/gameTypes
 ```
