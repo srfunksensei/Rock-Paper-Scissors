@@ -4,22 +4,24 @@ import com.rps.dto.Game;
 import com.rps.dto.GameType;
 import com.rps.dto.Move;
 import com.rps.dto.Result;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class GameEngineTest {
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testNoGame() {
-		GameEngine.evaluateResult(null);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> GameEngine.evaluateResult(null));
 	}
 	
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void testNoMoves() {
-		final Game game = new Game(GameType.PersonVsComputer);
-		game.setPlayerOne(Move.Paper);
-		
-		GameEngine.evaluateResult(null);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> {
+			final Game game = new Game(GameType.PersonVsComputer);
+			game.setPlayerOne(Move.Paper);
+
+			GameEngine.evaluateResult(null);
+		});
 	}
 	
 	@Test
@@ -31,7 +33,7 @@ public class GameEngineTest {
 
 			final Result result = GameEngine.evaluateResult(game);
 
-			Assert.assertEquals("Expected different result", Result.Draw, result);
+			Assertions.assertEquals(Result.Draw, result, "Expected different result");
 		}
 	}
 
@@ -44,7 +46,7 @@ public class GameEngineTest {
 
 			final Result result = GameEngine.evaluateResult(game);
 
-			Assert.assertEquals("Expected different result", Result.Win, result);
+			Assertions.assertEquals(Result.Win, result, "Expected different result");
 		}
 	}
 
@@ -57,7 +59,7 @@ public class GameEngineTest {
 
 			final Result result = GameEngine.evaluateResult(game);
 
-			Assert.assertEquals("Expected different result", Result.Loose, result);
+			Assertions.assertEquals(Result.Loose, result, "Expected different result");
 		}
 	}
 }

@@ -4,16 +4,16 @@ import com.rps.dto.Game;
 import com.rps.dto.GameType;
 import com.rps.exception.GameDoesNotExistException;
 import com.rps.pool.impl.GamePoolImpl;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class GamePoolTest {
 	
 	private final GamePool<String, Game> gamePool = new GamePoolImpl();
 	
-	@Test(expected = GameDoesNotExistException.class)
-	public void get_nonExistingGame() throws GameDoesNotExistException {
-		gamePool.get("non-existing-id");
+	@Test
+	public void get_nonExistingGame() {
+		Assertions.assertThrows(GameDoesNotExistException.class, () -> gamePool.get("non-existing-id"));
 	}
 
 	@Test
@@ -22,7 +22,7 @@ public class GamePoolTest {
 		gamePool.add(game);
 
 		final Game result = gamePool.get(game.getId());
-		Assert.assertEquals("Expected different game", game, result);
+		Assertions.assertEquals(game, result, "Expected different game");
 	}
 
 	@Test
@@ -30,10 +30,10 @@ public class GamePoolTest {
 		final Game game = new Game(GameType.PersonVsComputer);
 
 		final Game result = gamePool.add(game);
-		Assert.assertNull("Expected null", result);
+		Assertions.assertNull(result, "Expected null");
 
 		final Game game1 = gamePool.get(game.getId());
-		Assert.assertEquals("Expected different game", game, game1);
+		Assertions.assertEquals(game, game1, "Expected different game");
 	}
 
 	@Test
@@ -41,19 +41,19 @@ public class GamePoolTest {
 		final Game game = new Game(GameType.PersonVsComputer);
 
 		final Game result = gamePool.add(game);
-		Assert.assertNull("Expected null", result);
+		Assertions.assertNull(result, "Expected null");
 
 		final Game resultAddSecondTime = gamePool.add(game);
-		Assert.assertNotNull("Expected null", resultAddSecondTime);
+		Assertions.assertNotNull(resultAddSecondTime, "Expected null");
 
 
 		final Game game1 = gamePool.get(game.getId());
-		Assert.assertEquals("Expected different game", game, game1);
+		Assertions.assertEquals(game, game1, "Expected different game");
 	}
 
-	@Test(expected = IllegalArgumentException.class)
+	@Test
 	public void add_nullGame() {
-		gamePool.add(null);
+		Assertions.assertThrows(IllegalArgumentException.class, () -> gamePool.add(null));
 	}
 
 	@Test

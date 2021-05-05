@@ -1,31 +1,24 @@
 package com.rps.controller;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.rps.dto.Game;
 import com.rps.dto.GameType;
 import com.rps.dto.Move;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import com.rps.exception.GameDoesNotExistException;
+import com.rps.pool.GamePool;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rps.dto.Game;
-import com.rps.exception.GameDoesNotExistException;
-import com.rps.pool.GamePool;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
 @WebMvcTest(GameController.class)
 public class GameControllerTest {
 
@@ -39,7 +32,7 @@ public class GameControllerTest {
 
 	private final Game game = new Game(GameType.PersonVsComputer);
 
-	@Before
+	@BeforeEach
 	public void setup() throws GameDoesNotExistException {
 		BDDMockito.given(gamePool.get(game.getId())).willReturn(game);
 	}
