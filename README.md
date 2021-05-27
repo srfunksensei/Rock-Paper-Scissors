@@ -67,3 +67,20 @@ Date: Thu, 20 Jul 2017 10:10:14 GMT
 HTTP/1.1 204
 Date: Thu, 20 Jul 2017 10:10:42 GMT
 ```
+
+### Dockerizing app
+
+```bash
+$ mvn clean package
+$ docker build -t rps:latest .
+```
+
+running docker image
+
+```bash
+$ docker run -it -p 8080:8080 rps
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
